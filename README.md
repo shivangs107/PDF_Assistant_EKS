@@ -15,19 +15,18 @@ A scalable PDF Question-Answering system deployed on AWS EKS using Terraform, wi
 ## 🏗️ Architecture
 
 User → Streamlit App → Backend Logic  
-                      ↓ 
-                Prometheus Metrics (/metrics)  
-                      ↓ 
-                Prometheus (EKS)  
-                      ↓ 
-                Grafana Dashboard  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓ 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Prometheus Metrics (/metrics)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓ 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Prometheus (EKS)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓ 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grafana Dashboard  
 
 ## 📁 Project Structure
 
 ├── terraform/  
 │ ├── eks/ # EKS infrastructure (Stage 1)  
 │ └── k8s/ # Kubernetes resources (Stage 2)  
-|  
 ├── app.py # Streamlit UI  
 ├── BackendLogic.py # Core PDF + AI logic  
 ├── Dockerfile # Container image  
@@ -74,7 +73,7 @@ User → Streamlit App → Backend Logic
      - Copy Access Key ID and Secret Access Key
 2. Installed AWS CLI
    - https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
-   - Verify: aws --version
+   - Verify: `aws --version`
    - Configure AWS locally:
      - In powershell/cmd: aws configure
      - Fill:
@@ -82,7 +81,7 @@ User → Streamlit App → Backend Logic
         - AWS Secret Access Key
         - Region: ap-south-1 (or any other but remember to put it same everywhere if you are a beginner otherwise its confusing)
         - Output format: json
-    - Verify: aws sts get-caller-identity
+    - Verify: `aws sts get-caller-identity`
 3. Store OpenAI PI Key in AWS SSM
    - Create Parameter
      - Go to: AWS Console → System Manager → Parameter Store
@@ -92,60 +91,58 @@ User → Streamlit App → Backend Logic
        - Value: your-openeai-api-key
 4. Install Terraform
    - Download: https://developer.hashicorp.com/terraform/downloads
-   - Verify: terraform -version
+   - Verify: `terraform -version`
 5. Install Docker Desktop (if you want to save this image to your dockerhub or want to create a new image with changes)
    - Download: https://www.docker.com/products/docker-desktop/
-   - Ensure Docker is running: docker --version
+   - Ensure Docker is running: `docker --version`
    - Create DockerHub Account: https://hub.docker.com/
-   - Login locally: docker login
+   - Login locally: `docker login`
 6. Install kubectl (Best option is to install chocolatey and install these via it. You can check it out through ChatGPT)
    - Install: https://kubernetes.io/docs/tasks/tools/
-   - Verify: kubectl version --client
+   - Verify: `kubectl version --client`
 7. Insatll Helm
    - Install: https://helm.sh/docs/intro/install/
-   - Verify: helm version
+   - Verify: `helm version`
 8. Install Git
    - Download: https://git-scm.com/downloads
-   - Verify: git --version
+   - Verify: `git --version`
 9. Clone Repo (If its your first time using git then watch a video on how to properly link git with github)
-   - git clone <your-repo-url>
-   - cd <repo-folder>
+   - `git clone <your-repo-url>`
+   - `cd <repo-folder>`
 10. Setup Environment Variables
     - Create .env file: OPENAI_API_KEY=your-openai-api-key
 11. Build and push docker image (You can change name too if you want)
-    - docker build -t <your-dockerhub-username>/pdf-assistant-eks:latest .
-    - docker push <your-dockerhub-username>/pdf-assistant-eks:latest
+    - `docker build -t <your-dockerhub-username>/pdf-assistant-eks:latest .`
+    - `docker push <your-dockerhub-username>/pdf-assistant-eks:latest`
 12. Update Image in Terraform
     - In terraform/k8s/main.tf: image = "<your-dockerhub-username>/pdf-assistant-eks:latest"
    
 **These are the steps I remeber and haven't hard coded on a new device so....ALL THE BEST LOL**  
 **Before Going into the kubernetes deployment, kindly check your docker image too after building like this:**  
-docker run --env-file .env -p 8501:8501 -p 8000:8000 pdf-assistant-eks (or the name you provided)  
+`docker run --env-file .env -p 8501:8501 -p 8000:8000 pdf-assistant-eks` (or the name you provided)  
 Test: 
   - http://localhost:8501
   - http://localhost:8000/metrics  
 If everything works then atleast you can run the program locally...
 
-
-
-💎 **Step 1 — Deploy EKS (Infra Layer)**  
-cd terraform/eks (To the directory you are storing)  
-terraform init  
-terraform apply -auto-approve (Remeber it will start eks which will take around 10 min and billing will start)  
-💎 **Step 2 — Configure Kubernetes**  
-aws eks update-kubeconfig --name pdf-assistant-cluster --region ap-south-1  
-kubectl get nodes  
-💎 **Step 3 — Deploy Application + Monitoring**  
-cd terraform/k8s  
-terraform init  
-terraform apply -auto-approve (It will start the Streamit UI and Grafana dashboard along with prometheus metrics)  
+###💎 **Step 1 — Deploy EKS (Infra Layer)**  
+- `cd terraform/eks` (To the directory you are storing)  
+- `terraform init`  
+- `terraform apply -auto-approve` (Remeber it will start eks which will take around 10 min and billing will start)  
+###💎 **Step 2 — Configure Kubernetes**  
+- `aws eks update-kubeconfig --name pdf-assistant-cluster --region ap-south-1`  
+- `kubectl get nodes`  
+###💎 **Step 3 — Deploy Application + Monitoring**  
+- `cd terraform/k8s`  
+- `terraform init`  
+- `terraform apply -auto-approve` (It will start the Streamit UI and Grafana dashboard along with prometheus metrics)  
 
 # 🔴 **If you get stuck somewhere just copy paste these commands and paste it on ChatGPT and it might help**
-- kubectl get nodes
-- docker ps
-- docker images
-- kubectl get svc
-- kubectl logs <get.pods_name>
+- `docker ps`
+- `docker images`
+- `kubectl get nodes`
+- `kubectl get svc`
+- `kubectl logs <get.pods_name>`
 
 ## 🌐 Access Application
 
@@ -157,7 +154,7 @@ Although doing just terraform apply will also give the same but grafana takes a 
 
 **Username:** admin  
 **Password:** type/paste this in powershell:  
-kubectl get secret monitoring -grafana -o json path = "{.data.admin-password}" | %{[System.Text.Encoding]::UTF8.GetString([System.Convert]::From Base64String($_))}
+`kubectl get secret monitoring-grafana -o jsonpath="{.data.admin-password}" | %{ [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($_)) }`
 
 ## 📈 Monitoring Setup
 
@@ -168,10 +165,10 @@ kubectl get secret monitoring -grafana -o json path = "{.data.admin-password}" |
 ## 🧹 Destroy Infrastructure
 
 ⚠️ **Always destroy in order**
-cd terraform/k8s  
-terraform destroy -auto-approve  
-cd ../eks  
-terraform destroy -auto-approve  
+- `cd terraform/k8s`  
+- `terraform destroy -auto-approve`  
+- `cd ../eks`  
+- `terraform destroy -auto-approve`  
 
 ## ⚠️ Common Issues
 
