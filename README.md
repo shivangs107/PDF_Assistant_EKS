@@ -125,17 +125,27 @@ Test:
   - http://localhost:8000/metrics  
 If everything works then atleast you can run the program locally...
 
-###💎 **Step 1 — Deploy EKS (Infra Layer)**  
-- `cd terraform/eks` (To the directory you are storing)  
+### 💎 Step 1 — Deploy EKS (Infra Layer)
+- `cd terraform/eks` (Naviaget to your directory)  
 - `terraform init`  
-- `terraform apply -auto-approve` (Remeber it will start eks which will take around 10 min and billing will start)  
-###💎 **Step 2 — Configure Kubernetes**  
+- `terraform apply -auto-approve` (⚠️ This will create the EKS cluster (~10 minutes) and billing will start)
+
+---
+
+### 💎 Step 2 — Configure Kubernetes
 - `aws eks update-kubeconfig --name pdf-assistant-cluster --region ap-south-1`  
-- `kubectl get nodes`  
-###💎 **Step 3 — Deploy Application + Monitoring**  
+- `kubectl get nodes`
+
+---
+
+### 💎 Step 3 — Deploy Application + Monitoring
 - `cd terraform/k8s`  
 - `terraform init`  
-- `terraform apply -auto-approve` (It will start the Streamit UI and Grafana dashboard along with prometheus metrics)  
+- `terraform apply -auto-approve`
+  🚀 This will start:
+  - Streamlit UI  
+  - Grafana dashboard  
+  - Prometheus metrics    
 
 # 🔴 **If you get stuck somewhere just copy paste these commands and paste it on ChatGPT and it might help**
 - `docker ps`
