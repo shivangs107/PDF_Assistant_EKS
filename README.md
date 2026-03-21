@@ -14,24 +14,24 @@ A scalable PDF Question-Answering system deployed on AWS EKS using Terraform, wi
 
 ## 🏗️ Architecture
 
-User → Streamlit App → Backend Logic 
+User → Streamlit App → Backend Logic  
                       ↓ 
-                Prometheus Metrics (/metrics) 
+                Prometheus Metrics (/metrics)  
                       ↓ 
-                Prometheus (EKS) 
+                Prometheus (EKS)  
                       ↓ 
-                Grafana Dashboard
+                Grafana Dashboard  
 
 ## 📁 Project Structure
 
-├── terraform/
-│ ├── eks/ # EKS infrastructure (Stage 1)
-│ └── k8s/ # Kubernetes resources (Stage 2)
-|
-├── app.py # Streamlit UI
-├── BackendLogic.py # Core PDF + AI logic
-├── Dockerfile # Container image
-├── requirements.txt
+├── terraform/  
+│ ├── eks/ # EKS infrastructure (Stage 1)  
+│ └── k8s/ # Kubernetes resources (Stage 2)  
+|  
+├── app.py # Streamlit UI  
+├── BackendLogic.py # Core PDF + AI logic  
+├── Dockerfile # Container image  
+├── requirements.txt  
 ├── .env
 
 ## ⚙️ Tech Stack
@@ -118,27 +118,27 @@ User → Streamlit App → Backend Logic
 12. Update Image in Terraform
     - In terraform/k8s/main.tf: image = "<your-dockerhub-username>/pdf-assistant-eks:latest"
    
-**These are the steps I remeber and haven't hard coded on a new device so....ALL THE BEST LOL**
-**Before Going into the kubernetes deployment, kindly check your docker image too after building like this:**
-docker run --env-file .env -p 8501:8501 -p 8000:8000 pdf-assistant-eks (or the name you provided)
+**These are the steps I remeber and haven't hard coded on a new device so....ALL THE BEST LOL**  
+**Before Going into the kubernetes deployment, kindly check your docker image too after building like this:**  
+docker run --env-file .env -p 8501:8501 -p 8000:8000 pdf-assistant-eks (or the name you provided)  
 Test: 
   - http://localhost:8501
-  - http://localhost:8000/metrics
+  - http://localhost:8000/metrics  
 If everything works then atleast you can run the program locally...
 
 
 
-💎 **Step 1 — Deploy EKS (Infra Layer)**
-cd terraform/eks (To the directory you are storing)
-terraform init
-terraform apply -auto-approve (Remeber it will start eks which will take around 10 min and billing will start)
-💎 **Step 2 — Configure Kubernetes**
-aws eks update-kubeconfig --name pdf-assistant-cluster --region ap-south-1
-kubectl get nodes
-💎 **Step 3 — Deploy Application + Monitoring**
-cd terraform/k8s
-terraform init
-terraform apply -auto-approve (It will start the Streamit UI and Grafana dashboard along with prometheus metrics)
+💎 **Step 1 — Deploy EKS (Infra Layer)**  
+cd terraform/eks (To the directory you are storing)  
+terraform init  
+terraform apply -auto-approve (Remeber it will start eks which will take around 10 min and billing will start)  
+💎 **Step 2 — Configure Kubernetes**  
+aws eks update-kubeconfig --name pdf-assistant-cluster --region ap-south-1  
+kubectl get nodes  
+💎 **Step 3 — Deploy Application + Monitoring**  
+cd terraform/k8s  
+terraform init  
+terraform apply -auto-approve (It will start the Streamit UI and Grafana dashboard along with prometheus metrics)  
 
 # 🔴 **If you get stuck somewhere just copy paste these commands and paste it on ChatGPT and it might help**
 - kubectl get nodes
@@ -149,14 +149,14 @@ terraform apply -auto-approve (It will start the Streamit UI and Grafana dashboa
 
 ## 🌐 Access Application
 
-After deployment: terraform output
-It will give two links and you just have to paste it on the browser.
-Although doing just terraform apply will also give the same but grafana takes a little time so it might pending..., hence the use of output after 1-2 mins.
+After deployment: terraform output  
+It will give two links and you just have to paste it on the browser.  
+Although doing just terraform apply will also give the same but grafana takes a little time so it might pending..., hence the use of output after 1-2 mins.  
 
 ## 🔐 Grafana Login
 
-**Username:** admin
-**Password:** type/paste this in powershell:
+**Username:** admin  
+**Password:** type/paste this in powershell:  
 kubectl get secret monitoring -grafana -o json path = "{.data.admin-password}" | %{[System.Text.Encoding]::UTF8.GetString([System.Convert]::From Base64String($_))}
 
 ## 📈 Monitoring Setup
@@ -168,10 +168,10 @@ kubectl get secret monitoring -grafana -o json path = "{.data.admin-password}" |
 ## 🧹 Destroy Infrastructure
 
 ⚠️ **Always destroy in order**
-cd terraform/k8s
-terraform destroy -auto-approve
-cd ../eks
-terraform destroy -auto-approve
+cd terraform/k8s  
+terraform destroy -auto-approve  
+cd ../eks  
+terraform destroy -auto-approve  
 
 ## ⚠️ Common Issues
 
