@@ -203,6 +203,11 @@ Although doing just terraform apply will also give the same but grafana takes a 
 4. ❌ Terraform destroy fails
    - Always destroy k8s before eks
   
+5. ❌ Terraform plan fails on k8s
+   - If the error is: data.terraform_remote_state.eks.outputs is object with no attributes
+   - It means: Our EKS Terraform state has No outputs defined.
+   - It will start working once you do terraform apply on eks.
+  
 # 🔥 Key Learnings
 
 - Terraform + EKS + Kubernetes in one step → unreliable
