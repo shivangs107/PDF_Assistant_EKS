@@ -125,20 +125,22 @@ Test:
   - http://localhost:8000/metrics  
 If everything works then atleast you can run the program locally...
 
-### 💎 Step 1 — Deploy EKS (Infra Layer)
+---
+
+### 💎 Step 1 — Deploy EKS (Infra Layer) (10 min)
 - `cd terraform/eks` (Naviaget to your directory)  
 - `terraform init`  
-- `terraform apply -auto-approve` (⚠️ This will create the EKS cluster (~10 minutes) and billing will start)
+- `terraform apply -auto-approve` (⚠️ This will create the EKS cluster and billing will start)
 
 ---
 
-### 💎 Step 2 — Configure Kubernetes
+### 💎 Step 2 — Configure Kubernetes (For checking purpose, not a necessity)
 - `aws eks update-kubeconfig --name pdf-assistant-cluster --region ap-south-1`  
 - `kubectl get nodes`
 
 ---
 
-### 💎 Step 3 — Deploy Application + Monitoring
+### 💎 Step 3 — Deploy Application + Monitoring (2 min)
 - `cd terraform/k8s`  
 - `terraform init`  
 - `terraform apply -auto-approve`
@@ -146,6 +148,12 @@ If everything works then atleast you can run the program locally...
   - Streamlit UI  
   - Grafana dashboard  
   - Prometheus metrics    
+
+### 💎 Step 4 — Getting App url and grafana link  
+- Initially you will only get app_url link and grafana_url will show pending... as it takes time. After 1-2 min just do:
+- `terraform refresh`
+
+---
 
 # 🔴 **If you get stuck somewhere just copy paste these commands and paste it on ChatGPT and it might help**
 - `docker ps`
@@ -176,9 +184,9 @@ Although doing just terraform apply will also give the same but grafana takes a 
 
 ⚠️ **Always destroy in order**
 - `cd terraform/k8s`  
-- `terraform destroy -auto-approve`  
+- `terraform destroy -auto-approve` → 1 min  
 - `cd ../eks`  
-- `terraform destroy -auto-approve`  
+- `terraform destroy -auto-approve` → 9 min  
 
 ## ⚠️ Common Issues
 
