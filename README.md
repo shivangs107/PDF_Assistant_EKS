@@ -211,7 +211,10 @@ Although doing just terraform apply will also give the same but grafana takes a 
 # 🔥 Key Learnings
 
 - Terraform + EKS + Kubernetes in one step → unreliable
-- Use 2-stage Terraform architecture
+- Use 2-stage Terraform architecture. Otherwise even if depends_on is used it will still show:
+  - Error: Failed to construct REST client.
+  - cannot create REST client: no client config
+- The other option is to use `terraform apply -target=""` variable, but it is only good till testing phase.
 - Avoid time_sleep and heavy depends_on
 - Handle CRDs via Helm (best practice)
 - If you are going with minikube then don't use terraform as it is very confusing and terraform won't be even needed much.
