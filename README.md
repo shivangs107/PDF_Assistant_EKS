@@ -183,6 +183,8 @@ Although doing just terraform apply will also give the same but grafana takes a 
 ## 🧹 Destroy Infrastructure
 
 ⚠️ **Always destroy in order**
+- Remember that your internet should be connected. `terraform destroy` uses internet otherwise it will show:
+  - dial tcp: lookup eks.ap-south-1.amazonaws.com: no such host
 - `cd terraform/k8s`  
 - `terraform destroy -auto-approve` → 1 min  
 - `cd ../eks`  
