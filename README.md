@@ -15,11 +15,11 @@ A scalable PDF Question-Answering system deployed on AWS EKS using Terraform, wi
 ## 🏗️ Architecture
 
 User → Streamlit App → Backend Logic  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓ 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Prometheus Metrics (/metrics)  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓ 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Prometheus (EKS)  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓ 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Grafana Dashboard  
 
 ## 📁 Project Structure
@@ -45,7 +45,7 @@ User → Streamlit App → Backend Logic
 - **IaC:** Terraform
 - **Monitoring:** Prometheus + Grafana
 
-## ⚙️ Tech Stack
+## ⚙️ Backend Workflow
 
 1. Upload PDF
 2. Text is chunked and embedded
@@ -118,7 +118,7 @@ User → Streamlit App → Backend Logic
     - In terraform/k8s/main.tf: image = "<your-dockerhub-username>/pdf-assistant-eks:latest"
    
 **These are the steps I remeber and haven't hard coded on a new device so....ALL THE BEST LOL**  
-**Before Going into the kubernetes deployment, kindly check your docker image too after building like this:**  
+# **Before Going into the kubernetes deployment, kindly check your docker image too after building like this:**  
 `docker run --env-file .env -p 8501:8501 -p 8000:8000 pdf-assistant-eks` (or the name you provided)  
 Test: 
   - http://localhost:8501
@@ -127,7 +127,7 @@ If everything works then atleast you can run the program locally...
 
 ---
 
-### 💎 Step 1 — Deploy EKS (Infra Layer) (10 min)
+### 💎 Step 1 — Deploy EKS (Infra Layer) (11 min)
 - `cd terraform/eks` (Naviaget to your directory)  
 - `terraform init`  
 - `terraform apply -auto-approve` (⚠️ This will create the EKS cluster and billing will start)
@@ -140,7 +140,7 @@ If everything works then atleast you can run the program locally...
 
 ---
 
-### 💎 Step 3 — Deploy Application + Monitoring (2 min)
+### 💎 Step 3 — Deploy Application + Monitoring (3 min)
 - `cd terraform/k8s`  
 - `terraform init`  
 - `terraform apply -auto-approve`
@@ -168,10 +168,12 @@ After deployment: terraform output
 It will give two links and you just have to paste it on the browser.  
 Although doing just terraform apply will also give the same but grafana takes a little time so it might pending..., hence the use of output after 1-2 mins.  
 
-## 🔐 Grafana Login
+## 🔐 Grafana Login (I have also created a custom dashboard also if you don't want manual labour)  
 
 **Username:** admin  
-**Password:** type/paste this in powershell:  
+**Password:** `terraform output grafana_admin-password`  
+OR if it doesn't work anyhow  
+type/paste this in powershell:  
 `kubectl get secret monitoring-grafana -o jsonpath="{.data.admin-password}" | %{ [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($_)) }`
 
 ## 📈 Monitoring Setup
@@ -186,9 +188,9 @@ Although doing just terraform apply will also give the same but grafana takes a 
 - Remember that your internet should be connected. `terraform destroy` uses internet otherwise it will show:
   - dial tcp: lookup eks.ap-south-1.amazonaws.com: no such host
 - `cd terraform/k8s`  
-- `terraform destroy -auto-approve` → 1 min  
+- `terraform destroy -auto-approve` → 2 min  
 - `cd ../eks`  
-- `terraform destroy -auto-approve` → 9 min  
+- `terraform destroy -auto-approve` → 9.5 min  
 
 ## ⚠️ Common Issues
 
