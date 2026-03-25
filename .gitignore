@@ -1,0 +1,10 @@
+# Python
+__pycache__/
+
+#Terrafoorm
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
+
+#Environment variables
+.env

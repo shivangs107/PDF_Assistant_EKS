@@ -1,0 +1,35 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+.env/
+
+# Git
+.git/
+.gitignore
+terraform-ec2/
+
+# Project files not needed in container
+K8s/
+terraform-ec2/
+terraform/
+terraform-eks/
+*.ppt
+*.pptx
+*.pdf
+
+#Secrets
+*.pem
+*.key
+
+# OS/Editor junk
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+README.md
